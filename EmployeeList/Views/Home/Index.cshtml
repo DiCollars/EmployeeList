@@ -1,0 +1,74 @@
+﻿@model EmployeeList.Models.ViewModels.ViewModel
+@{
+    ViewData["Title"] = "Employee list";
+    string DecreeViewFormatter(bool status)
+    {
+        if (status)
+        {
+            return "10004";
+        }
+        else
+        {
+            return "10008";
+        }
+    }
+}
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Full name</th>
+            <th scope="col">Position</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Decree</th>
+            <th scope="col">Characteristic</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var Employee in Model.Employees)
+        {
+            <tr>
+                <td>@Employee.FullName</td>
+                <td>@Employee.Position</td>
+                <td>@Employee.Birthday.ToShortDateString()</td>
+                <td>&#@DecreeViewFormatter(Employee.Decree)</td>
+                <td>@Employee.Characteristic</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="~/Home/Index/@(Model.PageViewModel.PageNumber - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+        }
+        @for (int i = 1; i <= Model.PageViewModel.TotalPages; i++)
+        {
+            if (@Model.PageViewModel.PageNumber == i)
+            {
+                <li class="page-item"><a class="page-link bg-dark" href="~/Home/Index/@i">@i</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" href="~/Home/Index/@i">@i</a></li>
+            }
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="~/Home/Index/@(Model.PageViewModel.PageNumber + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+
